@@ -28,8 +28,16 @@ Common ClickHouse ENV variables and helpers used by SigNoz
   value: {{ default "signoz_logs" .Values.clickhouse.logDatabase | quote }}
 - name: CLICKHOUSE_USER
   value: {{ .Values.clickhouse.user | quote }}
+{{- if .Values.clickhouse.password.valueFrom }}
+- name: CLICKHOUSE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.clickhouse.password.valueFrom.secretKeyRef.name | quote }}
+      key: {{ .Values.clickhouse.password.valueFrom.secretKeyRef.key | quote }}
+{{- else }}
 - name: CLICKHOUSE_PASSWORD
   value: {{ .Values.clickhouse.password | quote }}
+{{- end }}
 - name: CLICKHOUSE_SECURE
   value: {{ .Values.clickhouse.secure | quote }}
 - name: CLICKHOUSE_VERIFY
@@ -83,8 +91,16 @@ Minimized ClickHouse ENV variables for user credentials
   value: {{ .Values.clickhouse.cluster | quote }}
 - name: CLICKHOUSE_USER
   value: {{ .Values.clickhouse.user | quote }}
+{{- if .Values.clickhouse.password.valueFrom }}
+- name: CLICKHOUSE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.clickhouse.password.valueFrom.secretKeyRef.name | quote }}
+      key: {{ .Values.clickhouse.password.valueFrom.secretKeyRef.key | quote }}
+{{- else }}
 - name: CLICKHOUSE_PASSWORD
   value: {{ .Values.clickhouse.password | quote }}
+{{- end }}
 - name: CLICKHOUSE_SECURE
   value: {{ .Values.clickhouse.secure | quote }}
 {{- else -}}
